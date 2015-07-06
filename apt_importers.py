@@ -107,6 +107,7 @@ def read_rrng(f):
 def label_ions(pos,rrngs):
     """labels ions in a .pos or .epos dataframe (anything with a 'Da' column)
     with composition and colour, based on an imported .rrng file."""
+
     pos['comp'] = ''
     pos['colour'] = '#FFFFFF'
 
@@ -124,16 +125,18 @@ def deconvolve(lpos):
        'n': stoichiometry
     For complex ions, the location of the different components is not
     altered - i.e. xyz position will be the same for several elements."""
+
     import re
 
     out = []
     pattern = re.compile(r'([A-Za-z]+):([0-9]+)')
 
     for g,d in lpos.groupby('comp'):
-        for i in range(len(g.split(' '))):
-            tmp = d.copy()
-            cn = pattern.search(g.split(' ')[i]).groups()
-            tmp['element'] = cn[0]
-            tmp['n'] = cn[1]
-            out.append(tmp.copy())
+        if g is not '':
+            for i in range(len(g.split(' '))):
+                tmp = d.copy()
+                cn = pattern.search(g.split(' ')[i]).groups()
+                tmp['element'] = cn[0]
+                tmp['n'] = cn[1]
+                out.append(tmp.copy())
     return pd.concat(out)
