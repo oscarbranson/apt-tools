@@ -55,9 +55,9 @@ def read_epos(f):
         ~ Appendix A of 'Atom Probe tomography: A Users Guide',
           notes on ePOS format."""
     # read in the data
-    n = len(file(f).read())/4
+    n = len(file(f,'rb').read())/4
     rs = n / 11
-    d = struct.unpack('>'+'fffffffffII'*rs,file(f).read(4*n))
+    d = struct.unpack('>'+'fffffffffII'*rs,file(f,'rb').read(4*n))
                     # '>' denotes 'big-endian' byte order
     # unpack data
     pos = pd.DataFrame({'x': d[0::11],
